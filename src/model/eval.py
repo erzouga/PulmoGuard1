@@ -1,17 +1,9 @@
-import os
-import numpy as np
-from tensorflow.keras.utils import CustomObjectScope
-import cv2
-
 from metrics import *
-from glob import glob
-
 from tqdm import tqdm
+from train import *
+from tensorflow.keras.utils import CustomObjectScope
 
-def create_dir(path):
-    """ Create a directory. """
-    if not os.path.exists(path):
-        os.makedirs(path)
+
 H=512
 W=512
 def save_results(image, mask, y_pred, save_image_path):
@@ -30,7 +22,6 @@ def save_results(image, mask, y_pred, save_image_path):
     cat_images = np.concatenate([image, line, mask, line, y_pred], axis=1)
     cv2.imwrite(save_image_path, cat_images)
 
-
 if __name__ == "__main__":
     """ Seeding """
     np.random.seed(42)
@@ -41,7 +32,7 @@ if __name__ == "__main__":
 
     """ Loading model """
     with CustomObjectScope({'iou': iou, 'dice_coef': dice_coef, 'dice_loss': dice_loss}):
-        model = tf.keras.models.load_model("files/model.h5")
+        model = tf.keras.models.load_model(r"C:\Users\erzou\Desktop\lUNG_CANCER\files\model.h5")
 
     """ Load the dataset """
     test_x = sorted(glob(r"C:\Users\erzou\Desktop\lUNG_CANCER\eval_data\image1\*"))
@@ -73,5 +64,3 @@ if __name__ == "__main__":
         """ Saving the prediction """
         save_image_path = f"results/{name}.png"
         save_results(image, mask, y_pred, save_image_path)
-
-

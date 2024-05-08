@@ -9,6 +9,10 @@ from tensorflow.keras.callbacks import ModelCheckpoint, CSVLogger, ReduceLROnPla
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.metrics import Recall, Precision
 
+def create_dir(path):
+    """ Create a directory. """
+    if not os.path.exists(path):
+        os.makedirs(path)
 def shuffling(x, y):
     x, y = shuffle(x, y, random_state=42)
     return x, y
